@@ -2,6 +2,7 @@
 
 import os.path
 import sys
+from local_settings import ENV
 
 SETTINGS_PATH = os.path.dirname(os.path.abspath(__file__))
 ROOT_PATH = os.path.join(SETTINGS_PATH, '..')
