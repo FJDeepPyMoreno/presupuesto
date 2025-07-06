@@ -1,14 +1,16 @@
 # ENVIRONMENT-SPECIFIC SETTINGS
 #
 ENV = {
-  'THEME': 'presupuesto-example',
+  'THEME': 'presupuesto_madrid',
 
-  'DEBUG': True,
+  'DEBUG': False,
+  'TEMPLATE_DEBUG': False,
 
   # Database
-  'DATABASE_NAME': 'dvmi_example_dev',
-  'DATABASE_USER': '',
-  'DATABASE_PASSWORD': '',
+  'DATABASE_NAME': 'presupuestos',
+  'DATABASE_USER': 'postgres',
+  'DATABASE_PASSWORD': 'Madrid.2025',
+  'DATABASE_PORT': '5432',
   'SEARCH_CONFIG': 'unaccent_spa',
 
   # Caching
