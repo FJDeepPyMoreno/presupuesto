@@ -6,7 +6,7 @@ ENV = {
   'DEBUG': False,
   'TEMPLATE_DEBUG': False,
 
-  # Database ; configure it
+  # Database
   'DATABASE_NAME': 'presupuestos',
   'DATABASE_USER': 'postgres',
   'DATABASE_PASSWORD': 'Madrid.2025',
