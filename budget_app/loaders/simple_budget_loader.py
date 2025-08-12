@@ -31,13 +31,14 @@ class SimpleBudgetLoader(BaseLoader):
     def parse_budget_data(self, budget_items, filename):
         if os.path.isfile(filename):
             print("Leyendo datos de %s..." % filename)
-            reader = csv.reader(open(filename, 'r', encoding=self._get_data_files_encoding()), delimiter=self._get_delimiter())
-            for index, line in enumerate(reader):
-                if line==[] or re.match("^#", line[0]):     # Ignore comments and empty lines
-                    continue
+            with open(filename, 'r', encoding=self._get_data_files_encoding()) as fr:
+                reader = csv.reader(fr, delimiter=self._get_delimiter())
+                for index, line in enumerate(reader):
+                    if line==[] or re.match("^#", line[0]):     # Ignore comments and empty lines
+                        continue
 
-                # Finally, we have useful data
-                budget_items.append(self.parse_item(filename, line))
+                    # Finally, we have useful data
+                    budget_items.append(self.parse_item(filename, line))
 
 
     def load_budget(self, path, entity, year, status, items):
@@ -162,24 +163,25 @@ class SimpleBudgetLoader(BaseLoader):
     # Load the institutional categories
     def load_institutional_classification(self, path, budget):
         filename = self.get_institutional_classification_path(path)
-        reader = csv.reader(open(filename, 'r', encoding='utf-8'), delimiter=self._get_delimiter())
-        category_objects = []
-        for index, line in enumerate(reader):
-            if line==[] or re.match("^#", line[0]):  # Ignore comments and empty lines
-                continue
+        with open(filename, 'r', encoding='utf-8') as fr:
+            reader = csv.reader(fr, delimiter=self._get_delimiter())
+            category_objects = []
+            for index, line in enumerate(reader):
+                if line==[] or re.match("^#", line[0]):  # Ignore comments and empty lines
+                    continue
 
-            institution = line[0]
-            section = line[1]
-            department = line[2]
-            description = line[3]
+                institution = line[0]
+                section = line[1]
+                department = line[2]
+                description = line[3]
 
-            ic = InstitutionalCategory( institution=institution if institution != "" else None,
-                                        section=institution+section if section != "" else None,
-                                        department=institution+section+department if department != "" else None,
-                                        description=description,
-                                        budget=budget)
-            category_objects.append(ic)
-        InstitutionalCategory.objects.bulk_create(category_objects)
+                ic = InstitutionalCategory( institution=institution if institution != "" else None,
+                                            section=institution+section if section != "" else None,
+                                            department=institution+section+department if department != "" else None,
+                                            description=description,
+                                            budget=budget)
+                category_objects.append(ic)
+            InstitutionalCategory.objects.bulk_create(category_objects)
 
 
     # Determine the economic classification file path
@@ -189,26 +191,27 @@ class SimpleBudgetLoader(BaseLoader):
     # Load the economic categories
     def load_economic_classification(self, path, budget):
         filename = self.get_economic_classification_path(path)
-        reader = csv.reader(open(filename, 'r', encoding='utf-8'), delimiter=self._get_delimiter())
-        category_objects = []
-        for index, line in enumerate(reader):
-            if line==[] or re.match("^#", line[0]):  # Ignore comments and empty lines
-                continue
+        with open(filename, 'r', encoding='utf-8') as fr:
+            reader = csv.reader(fr, delimiter=self._get_delimiter())
+            category_objects = []
+            for index, line in enumerate(reader):
+                if line==[] or re.match("^#", line[0]):  # Ignore comments and empty lines
+                    continue
 
-            is_expense = (line[0] != 'I')
-            chapter = line[1]
-            article = line[2]
-            concept = line[3]
-            description = line[4]
+                is_expense = (line[0] != 'I')
+                chapter = line[1]
+                article = line[2]
+                concept = line[3]
+                description = line[4]
 
-            ec = EconomicCategory(  expense=is_expense,
-                                    chapter=chapter if chapter != "" else None,
-                                    article=chapter+article if article != "" else None,
-                                    heading=chapter+article+concept if concept != "" else None,
-                                    description=description,
-                                    budget=budget)
-            category_objects.append(ec)
-        EconomicCategory.objects.bulk_create(category_objects)
+                ec = EconomicCategory(  expense=is_expense,
+                                        chapter=chapter if chapter != "" else None,
+                                        article=chapter+article if article != "" else None,
+                                        heading=chapter+article+concept if concept != "" else None,
+                                        description=description,
+                                        budget=budget)
+                category_objects.append(ec)
+            EconomicCategory.objects.bulk_create(category_objects)
 
 
     # Determine the functional classification file path
@@ -218,33 +221,34 @@ class SimpleBudgetLoader(BaseLoader):
     # Load the functional categories
     def load_functional_classification(self, path, budget):
         filename = self.get_functional_classification_path(path)
-        reader = csv.reader(open(filename, 'r', encoding='utf-8'), delimiter=self._get_delimiter())
-        category_objects = []
-        for index, line in enumerate(reader):
-            if line==[] or re.match("^#", line[0]):     # Ignore comments and empty lines
-                continue
+        with open(filename, 'r', encoding='utf-8') as fr:
+            reader = csv.reader(fr, delimiter=self._get_delimiter())
+            category_objects = []
+            for index, line in enumerate(reader):
+                if line==[] or re.match("^#", line[0]):     # Ignore comments and empty lines
+                    continue
 
-            # If we're not using subprogrammes, insert an empty column where they would go.
-            # This feels better than forcing everybody to add an empty column.
-            if not self._use_subprogrammes():
-                line.insert(4, "")
+                # If we're not using subprogrammes, insert an empty column where they would go.
+                # This feels better than forcing everybody to add an empty column.
+                if not self._use_subprogrammes():
+                    line.insert(4, "")
 
-            area = line[0]
-            policy = line[1]
-            group = line[2]
-            programme = line[3]
-            subprogramme = line[4]
-            description = line[5]
+                area = line[0]
+                policy = line[1]
+                group = line[2]
+                programme = line[3]
+                subprogramme = line[4]
+                description = line[5]
 
-            fc = FunctionalCategory(area=area if area != "" else None,
-                                    policy=area+policy if policy != "" else None,
-                                    function=area+policy+group if group != "" else None,
-                                    programme=area+policy+group+programme if programme != "" else None,
-                                    subprogramme=area+policy+group+programme+subprogramme if subprogramme != "" else None,
-                                    description=description,
-                                    budget=budget)
-            category_objects.append(fc)
-        FunctionalCategory.objects.bulk_create(category_objects)
+                fc = FunctionalCategory(area=area if area != "" else None,
+                                        policy=area+policy if policy != "" else None,
+                                        function=area+policy+group if group != "" else None,
+                                        programme=area+policy+group+programme if programme != "" else None,
+                                        subprogramme=area+policy+group+programme+subprogramme if subprogramme != "" else None,
+                                        description=description,
+                                        budget=budget)
+                category_objects.append(fc)
+            FunctionalCategory.objects.bulk_create(category_objects)
 
 
     # Determine the functional classification file path
@@ -256,18 +260,19 @@ class SimpleBudgetLoader(BaseLoader):
         filename = self.get_geographic_classification_path(path)
         category_objects = []
         if os.path.isfile(filename):
-            reader = csv.reader(open(filename, 'r', encoding='utf-8'), delimiter=self._get_delimiter())
-            for index, line in enumerate(reader):
-                if line==[] or re.match("^#", line[0]):  # Ignore comments and empty lines
-                    continue
+            with open(filename, 'r', encoding='utf-8') as fr:
+                reader = csv.reader(fr, delimiter=self._get_delimiter())
+                for index, line in enumerate(reader):
+                    if line==[] or re.match("^#", line[0]):  # Ignore comments and empty lines
+                        continue
 
-                code = line[0]
-                description = line[1]
+                    code = line[0]
+                    description = line[1]
 
-                gc = GeographicCategory(code=code,
-                                        description=description,
-                                        budget=budget)
-                category_objects.append(gc)
+                    gc = GeographicCategory(code=code,
+                                            description=description,
+                                            budget=budget)
+                    category_objects.append(gc)
         GeographicCategory.objects.bulk_create(category_objects)
 
     # Get the amount for a budget line.
