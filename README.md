@@ -1,4 +1,4 @@
-Este repositorio contiene el código de la aplicación de visualización de [Dónde van mis impuestos][1], desarrollada originalmente como parte del proyecto [Aragón Open Data][3].
+Este repositorio contiene el código de la aplicación de visualización de [Dónde van mis impuestos][1], desarrollada originalmente como parte del proyecto [Aragón Open Data][3]. .
 
 ### Introducción
 El objetivo del proyecto consiste en ofrecer una visualización de los Presupuestos Generales del Estado suficientemente intuitiva como para ser comprendida por personas sin experiencia previa en política presupuestaria, pero a la vez suficientemente detallada para permitir a aquellas personas interesadas y expertas en este asunto profundizar más de una manera ágil y efectiva. Así, se muestra la realidad del presupuesto en su conjunto, cubriendo tanto el lado de los ingresos como el de los gastos, y tanto las cantidades presupuestadas como las finalmente ejecutadas (cuando la información esté disponible).
