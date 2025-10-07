@@ -227,44 +227,22 @@ def COMPRESS_JINJA2_GET_ENVIRONMENT():
 
 # Logging configuration
 if DEBUG:
-    # LOGGING = {
-    #     'version': 1,
-    #     'disable_existing_loggers': False,
-    #     'handlers': {
-    #         'console': {
-    #             'level': 'DEBUG',
-    #             'class': 'logging.StreamHandler',
-    #         },
-    #     },
-    #     'loggers': {
-    #         'django': {
-    #             'level': 'DEBUG',
-    #             'handlers': ['console'],
-    #         },
-    #         'django.utils.autoreload': {
-    #             'handlers': ['console'],
-    #             'level': 'ERROR',
-    #         },
-    #     }
-    # }
     LOGGING = {
         'version': 1,
         'disable_existing_loggers': False,
         'handlers': {
-            'file': {
+            'console': {
                 'level': 'DEBUG',
-                'class': 'logging.FileHandler',
-                'filename': os.path.join(ROOT_PATH, "mi_log.log")
+                'class': 'logging.StreamHandler',
             },
         },
         'loggers': {
             'django': {
                 'level': 'DEBUG',
-                'handlers': ['file'],
-                'propagate': True
+                'handlers': ['console'],
             },
             'django.utils.autoreload': {
-                'handlers': ['file'],
+                'handlers': ['console'],
                 'level': 'ERROR',
             },
         }
