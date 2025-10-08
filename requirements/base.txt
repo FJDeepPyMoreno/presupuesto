@@ -11,3 +11,4 @@ psycopg2==2.8.6
 Pygments==2.0.2
 python-dateutil==2.6.0
 six==1.13.0
+chardet==4.0.0
